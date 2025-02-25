@@ -3,6 +3,7 @@
 require_once './../Database/Database.php';
 require_once './../Services/PedidoService.php';
 require_once './../Services/Detalles_pedidoService.php';
+require_once './../Services/EntradaService.php';
 
 header("Content-Type: application/json");
 
@@ -22,6 +23,7 @@ try {
     // 3. Instanciar los servicios
     $pedidoService = new PedidoService();
     $detalleService = new Detalles_pedidoService();
+    $entradaService = new EntradaService();
 
     // 4. Crear el pedido en la base de datos
     $pedidoService->CreatePedido($email);
@@ -36,6 +38,10 @@ try {
 
     // 6. Calcular el total del pedido
     $total = $pedidoService->getTotalByPedido($id_pedido);
+
+    foreach ($data["carrito"] as $producto) {
+        $entradaService->restaStock($producto["id_producto"], $producto["cantidad"]);
+    }
 
     // 7. Responder con éxito y el total calculado
     echo json_encode([
