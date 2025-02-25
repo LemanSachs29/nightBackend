@@ -5,7 +5,15 @@ require_once './../Services/PedidoService.php';
 require_once './../Services/Detalles_pedidoService.php';
 require_once './../Services/EntradaService.php';
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 try {
     // 1. Recibir JSON desde el cuerpo de la solicitud
